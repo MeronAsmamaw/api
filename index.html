@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchMoviebyID</title>
+</head>
+
+<body>
+    <h1>Movie Data</h1>
+    <div id="movieInfo"></div>
+    <form>
+        <input type="text" id="movieId" placeholder="Search for movies...">
+        <button type="submit" id="search-btn">Search Movies</button>
+    </form>
+
+    <script>
+        const apiKey = 'k_qv8r579f';
+        const movieId = 'tt1375666';
+
+        const searchBtn = document.getElementById('search-btn');
+        searchBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the form from submitting
+            const movieId = document.getElementById('movieId').value;
+
+            fetch(`https://imdb-api.com/en/API/Title/${apiKey}/${movieId}`)
+                .then(response => response.json())
+                .then(data => {
+
+                    const movieInfo = document.getElementById('movieInfo');
+                    const title = data.fullTitle;
+                    const releaseYear = data.year;
+                    const rating = data.imDbRating;
+                    const cast = data.stars.split(',').slice(0, 5).join(', ');
+
+                    movieInfo.innerHTML = `
+                    <h2>${title}</h2>
+                    <p>Release Year: ${releaseYear}</p>
+                    <p>Rating: ${rating}</p>
+                    <p>Cast: ${cast}</p>
+                `;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>
